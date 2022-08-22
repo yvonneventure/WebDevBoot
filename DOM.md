@@ -9,7 +9,7 @@ style vs. content vs. behavior
 
 syntax (w3school)
 
-
+position of putting <script></script> in html
 
 
 
