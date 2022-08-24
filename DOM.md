@@ -58,14 +58,44 @@ document.getElementById("demo").innerHTML = "Hello World!";
 `const x = document.querySelectorAll("p.intro");`
 
 
-## Object/class
+## JavaScript Object
+
+Similar to python dictionary.
 
 
 ### Constructor Function
 
-Object Name capitalize
+```javascript
 
-### Initialize object
+//counstructor function
+
+function MaleWaitor (name, age, hasWorkPermit){      //function name needs to be each word capitalised
+  this.name=name;
+  this.age=age;
+  this.hasWorkPermit=hasWorkPermit;
+  this.wait=function(){
+    console.log("I can wait");    //add method
+  }
+}
+
+// then initialise Object
+
+var maleWaitor1= new MaleWaitor("Timmy","23",true);
+
+maleWaitor1.wait();   //call object method
+
+var name=maleWaitor1.name;  //get object value
+```
+
+Another example
+
+```javascript
+// Audio is a constructor function
+
+var tom1 = new Audio("sounds/tom-1.mp3");
+tom1.play();
+
+```
 
 
 
