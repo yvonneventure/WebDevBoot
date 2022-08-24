@@ -51,7 +51,10 @@ Express is the most used framework in Node.js and it's like a external package.
 
 Installation in command line: `npm install express `
 
+#### Front-end vs Back-end
 
+Front-end: have everythin run on client/user side, like render javascript on html.
+Back-end: have work happen on server, then send readied info to client side and render the html.
 
 ### [Nodemon](https://www.npmjs.com/package/nodemon)
 
