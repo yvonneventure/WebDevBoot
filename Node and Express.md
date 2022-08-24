@@ -28,7 +28,7 @@ Then run `node index.js` in command line to **execute**.
 
 ### To Use External Modules
 
-#### Use NPM (Node Package Manager)
+#### Use [NPM (Node Package Manager)](https://www.npmjs.com)
 
 > npm by default is installed with node.js, but npm initiation has to be done in every project
 
@@ -45,7 +45,7 @@ Then run `node index.js` in command line to **execute**.
 
 
 
-## Express
+## [Express](https://expressjs.com/en/4x/api.html)
 
 Express is the most used framework in Node.js and it's like a external package.
 
@@ -53,7 +53,7 @@ Installation in command line: `npm install express `
 
 
 
-
+### [Nodemon](https://www.npmjs.com/package/nodemon)
 
 
 
