@@ -47,9 +47,81 @@ Then run `node index.js` in command line to **execute**.
 
 ## [Express](https://expressjs.com/en/4x/api.html)
 
-Express is the most used framework in Node.js and it's like a external package.
+Express is the most used framework in Node.js and it's like a external package, so need to be installed for each project.
 
 Installation in command line: `npm install express `
+
+Then in js file
+
+```javascript
+const express = require('express');
+
+const app = express();
+
+//set get request
+
+app.get("/",function(request, response){
+  console.log(request);   // will be able to see the requests sent
+  
+  response.send("hello");  // when go to http://localhost:3000/ "hello" will render
+  
+  response.send("<h1>hello</h1>");  // when go to http://localhost:3000/ html will render
+});
+
+```
+
+To work with user input, we need[body-parser](https://www.npmjs.com/package/body-parser). To install, in command line `npm install body-parser`
+
+JS file looks like this:
+
+```javascript
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+//need to add below line everytime
+app.use(bodyParser.urlencoded({extended:true}));
+
+app.get("/",function(request, response){
+
+  response.sendFile(__dirname+"/index.html");  //  .sendFile is to render the whole hmtl page
+  // __dirname is a constant and grab your current directory, then even if we move to cloud or some other server, it will find the file
+});
+
+// POST request
+
+app.post("/",function(request, response){
+  console.log(request.body);   //.body is a preperty of bodyParser, this will log all the value user inputed
+  
+  var num1=Number(request.body.num1);  // num1 and num2 are the variable names in index.html
+  var num2=Number(request.body.num2);
+  var result=num1+num2;
+  response.send("result is"+result);  
+ 
+});
+```
+
+HTML file looks like this:
+
+```html
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Calculator</title>
+  </head>
+  <body>
+    <h1>Calculator</h1>
+    <!-- value in name attribute are variable name, for example num1 and num2-->
+    <form action="/" method="post">
+      <input type="text" name="num1" placeholder="First Number">
+      <input type="text" name="num2" placeholder="Second Number">
+      <button type="submit" name="submit">Calculator</button>
+      </form>
+  </body>
+</html>
+```
 
 #### Front-end vs Back-end
 
@@ -58,9 +130,13 @@ Back-end: have work happen on server, then send readied info to client side and 
 
 ### [Nodemon](https://www.npmjs.com/package/nodemon)
 
+nodemon, a npm package that will make it way easier for us to auto start our servers.
 
+Install nodemon `npm install -g nodemon`; if not work, use this one instead: `sudo npm install -g nodemon`
 
+After install, instead of run srcipt using `node index.js`, use `nodemon index.js` and once your make changes to scripts, use `command+s` to save and nodemon will auto update.
 
+To exit, use `ctrl+c`.
 
 
 
