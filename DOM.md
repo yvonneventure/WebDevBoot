@@ -11,6 +11,15 @@ syntax (w3school)
 
 position of putting <script></script> in html
 
+Object/class
 
+
+constructor function
+
+Object Name capitalize
+
+Initialize object
+
+Switch function
 
 
