@@ -190,11 +190,15 @@ In Index.js
 ```js
 import React from "react";
 import ReactDOM from "react-dom";
-import pi, { doublePi, triplePi } from "./math.js";
+
+//as pi is default export, we can named it anything like "PI" or even "*"
+// non-default export, however, has to have the exact same name when they export
+
+import PI, { doublePi, triplePi } from "./math.js";
 
 ReactDOM.render(
   <ul>
-    <li>{pi}</li>
+    <li>{PI}</li>
     <li>{doublePi()}</li>
     <li>{triplePi()}</li>
   </ul>,
@@ -218,10 +222,52 @@ function triplePi() {
 
 //default export 
 export default pi;
+// use {} to export more than 1
 export { doublePi, triplePi };
 
 ```
 
+### React Props
+
+Use **props** to pass over information to the component.
+
+Create one component (or like a template), by passing different info, it can display the different info but has the same layout.
+
+```js
+import React from "react";
+import ReactDOM from "react-dom";
+
+function Card(props) {
+  return (
+    <div>
+      <h2>{props.name}</h2>
+      <img src={props.img} alt="avatar_img" />
+      <p>{props.tel}</p>
+      <p>{props.email}</p>
+    </div>
+  );
+}
+
+ReactDOM.render(
+  <div>
+    <h1>My Contacts</h1>
+    <Card
+      name="Beyonce"
+      img="https://blackhistorywall.files.wordpress.com/2010/02/picture-device-independent-bitmap-119.jpg"
+      tel="+123 456 789"
+      email="b@beyonce.com"
+    />
+    <Card
+      name="Jack Bauer"
+      img="https://pbs.twimg.com/profile_images/625247595825246208/X3XLea04_400x400.jpg"
+      tel="+7387384587"
+      email="jack@nowhere.com"
+    />
+  </div>,
+  document.getElementById("root")
+);
+```
+  
 
 
 
