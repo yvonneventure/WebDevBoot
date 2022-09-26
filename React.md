@@ -268,19 +268,135 @@ ReactDOM.render(
 );
 ```
   
+## Javascript ES6 Map/Filter/Reduce
 
 
+Map
+
+```js
+var numbers = [3, 56, 2, 48, 5];
+
+//Map -Create a new array by doing something with each item in an array.
+
+function double(x) {
+  return x * 2;
+}
+const newNumbers = numbers.map(double);
+
+// can be simplified like below
+const newNumbers = numbers.map(function (x) {
+  return x * 2;
+});
+
+// to achieve the same thing use forEach
+var newNumbers = [];
+numbers.forEach(function (x) {
+  newNumbers.push(x * 2);
+});
+console.log(newNumbers);
+```
+
+Filter:
+```js
+//Filter - Create a new array by keeping the items that return true.
+// num is the item in the array
+const newNumbers = numbers.filter(function(num) {
+  return num < 10;
+});
+```
+
+Reduce
+
+```js
+//Reduce - Accumulate a value by doing something to each item in an array.
+
+var newNumber = numbers.reduce(function (accumulator, currentNumber) {
+  //console.log("accumulator = " + accumulator);    // starting point
+  //console.log("currentNumber = " + currentNumber);  // something to be added
+    return accumulator + currentNumber;
+})
+
+// achieve the same thing by using forEach
+var newNumber = 0;
+numbers.forEach(function (currentNumber) {
+  newNumber += currentNumber
+})
+```
+
+Find
+
+```js
+//Find - find the first item that matches from an array.
+
+const newNumber = numbers.find(function (num) {
+  return num > 10;
+})
+
+```
+
+Find Index
+
+```js
+//FindIndex - find the index of the first item that matches.
+
+const newNumber = numbers.findIndex(function (num) {
+  return num > 10;
+})
+```
+
+### Javascript ES6 Arrow functions
+
+`{ return }` can be ignored.
+
+```js
+//Map -Create a new array by doing something with each item in an array.
+// const newNumbers = numbers.map( x => x * 2);
+
+////Filter - Create a new array by keeping the items that return true.
+// const newNumbers = numbers.filter(num => num < 10);
+
+//Reduce - Accumulate a value by doing something to each item in an array.
+//more than one input, use (), otherwise () can be ignored
+//const newNumber = numbers.reduce((accumulator, currentNumber) => accumulator + currentNumber);
+
+//Find - find the first item that matches from an array.
+// const newNumber = numbers.find(num => num > 10);
+
+//FindIndex - find the index of the first item that matches.
+// const newNumber = numbers.findIndex(num => num > 10);
+```
+
+### React Conditional Rendering with the Ternary Operator (condition?if true: if false) or use && - AND Operator)
+
+Ternary Operator (condition?if true: if false).
+
+If we only care about the condition is true, can use `&&`. Or, you can use null as the expression for condition is false.(condition?if true: null).
 
 
+```js
+import React from "react";
+import Login from "./Login";
 
+var isLoggedIn = false;
 
+const currentTime = new Date(2019, 11, 1, 9).getHours();
+console.log(currentTime);
 
+function App() {
+  return (
+    <div className="container">
+      {/*Ternary Operator*/}
+      {isLoggedIn ? <h1>Hello</h1> : <Login />}
+      {/*AND Operator*/}
+      {currentTime > 12 && <h1>Why are you still working?</h1>}
+    </div>
+  );
+}
 
+export default App;
+```
 
-
-
-
-
+## React State
 
 
 
@@ -290,6 +406,7 @@ ReactDOM.render(
 ## Reference
 
 > - Use [Code Sandbox](http://codesandbox.io/) for online React development.
+> - [Chrome React Developer Tool](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
 > - [Standard HTML attributes](https://www.w3schools.com/tags/ref_standardattributes.asp)
 > - [CSS Property List](https://www.w3schools.com/cssref/)
 > - [Airbnb Style Guide for React](https://github.com/airbnb/javascript/tree/master/react)
