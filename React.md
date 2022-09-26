@@ -366,6 +366,35 @@ const newNumber = numbers.findIndex(function (num) {
 // const newNumber = numbers.findIndex(num => num > 10);
 ```
 
+
+### Javascript ES6 Object & Array Destructuring
+
+[Object & Array Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+
+```js
+const animals = [
+  {
+    name: "cat",
+    sound: "meow",
+    feedingRequirements: {
+      food: 2,
+      water: 3
+    }
+  },
+  { name: "dog", sound: "woof" }
+];
+
+
+//Destructuring Arrays
+// console.log(animals);
+const [cat, dog] = animals;
+// console.log(cat);
+
+```
+
+
+
+
 ### React Conditional Rendering with the Ternary Operator (condition?if true: if false) or use && - AND Operator)
 
 Ternary Operator (condition?if true: if false).
