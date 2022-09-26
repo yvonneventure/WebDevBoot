@@ -47,7 +47,7 @@ ReactDOM.render(
 
   <body>
     <div id="root"></div>
-    <script src="../src/index.js" type="text/javascript"></script>
+    <script src="../src/index.js" type="text/JSX"></script>
   </body>
 </html>
 ```
@@ -121,6 +121,106 @@ ReactDOM.render(
 
 ### React Components
 
+In `index.js` only render `<App />` component.
+
+```js
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App";
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+Then in `App.jsx" is like a component tree, and the entire structure.
+
+```js
+import React from "react";
+import Heading from "./Heading";
+import List from "./List";
+
+function App() {
+  return (
+    <div>
+      <Heading />
+      <List />
+      <List />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+In `Heading.jsx` create heading component.
+
+```
+import React from "react";
+
+function Heading() {
+  return <h1>My Favourite Foods</h1>;
+}
+
+export default Heading;
+```
+
+In `List.jsx` create list component.
+
+```js
+import React from "react";
+
+function List() {
+  return (
+    <ul>
+      <li>Bacon</li>
+      <li>Jamon</li>
+      <li>Noodles</li>
+    </ul>
+  );
+}
+
+export default List;
+
+```
+
+### ES6 Import & Export
+
+In Index.js 
+
+```js
+import React from "react";
+import ReactDOM from "react-dom";
+import pi, { doublePi, triplePi } from "./math.js";
+
+ReactDOM.render(
+  <ul>
+    <li>{pi}</li>
+    <li>{doublePi()}</li>
+    <li>{triplePi()}</li>
+  </ul>,
+  document.getElementById("root")
+);
+
+```
+
+in `math.js` export
+
+```js
+const pi = 3.1415962;
+
+function doublePi() {
+  return pi * 2;
+}
+
+function triplePi() {
+  return pi * 3;
+}
+
+//default export 
+export default pi;
+export { doublePi, triplePi };
+
+```
 
 
 
