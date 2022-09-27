@@ -7,7 +7,7 @@
 ### Project 
 
 > - [emojipedia](https://txd2bb.csb.app/)
-> - [to-do list](https://m2dz8v.csb.app/)
+> - [to-do list](https://jgocot.csb.app/)
 > - [Keeper App](https://ot0qmd.csb.app/)
 
 
