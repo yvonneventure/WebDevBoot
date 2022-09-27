@@ -367,7 +367,7 @@ const newNumber = numbers.findIndex(function (num) {
 ```
 
 
-### Javascript ES6 Object & Array Destructuring
+### Javascript ES6 Object & Array Destructuring ｜ 
 
 [Object & Array Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 
@@ -384,12 +384,47 @@ const animals = [
   { name: "dog", sound: "woof" }
 ];
 
+function useAnimals(animal) {
+  return [
+    animal.name,
+    function() {
+      console.log(animal.sound);
+    }
+  ];
+}
 
 //Destructuring Arrays
 // console.log(animals);
 const [cat, dog] = animals;
 // console.log(cat);
 
+const [animal, makeSound] = useAnimals(cat);
+console.log(animal);
+makeSound();
+
+//Destructuring Objects
+const { name, sound} = cat;
+const { name: catName, sound: catSound } = cat;
+const { name = "Fluffy", sound = "Purr" } = cat;
+const {feedingRequirements: {food, water} } = cat;
+console.log(food);
+
+// Spread Operator
+const citrus = ["Lime", "Lemon", "Orange"];
+const fruits = ["Apple", ...citrus, "Banana", "Coconut"];
+
+const fullName = {
+  fName: "James",
+  lName: "Bond"
+};
+
+const user = {
+  ...fullName,
+  id: 1,
+  username: "jamesbond007"
+};
+
+// same level object
 ```
 
 
