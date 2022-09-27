@@ -229,7 +229,7 @@ export { doublePi, triplePi };
 
 ### React Props
 
-Use **props** to pass over information to the component.
+Use **props** to pass over information to the component. `props` are read-only, which means they cannot be updated.
 
 Create one component (or like a template), by passing different info, it can display the different info but has the same layout.
 
@@ -635,6 +635,8 @@ function App() {
   );
 }
 ```
+
+### Manage Component Tree with States
 
 
 
