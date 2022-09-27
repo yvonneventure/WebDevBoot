@@ -464,13 +464,177 @@ export default App;
 
 ### React Hooks - [useState](https://reactjs.org/docs/hooks-reference.html#usestate)
 
+State is similar to props, but it is private and fully controlled by the component. It means each component is independent.
 
+```js
+import React, { useState } from "react";
+// counter 
+function App() {
 
+//useState with initial value count=0
 
+  const [count, setCount] = useState(0);
 
+  function increase() {
+    setCount(count + 1);
+  }
 
+  function decrease() {
+    setCount(count - 1);
+  }
 
+  return (
+    <div className="container">
+      <h1>{count}</h1>
+      //trigger state to change
+      <button onClick={decrease}>-</button>
+      <button onClick={increase}>+</button>
+    </div>
+  );
+}
+```
 
+### React Event Handling
+
+> - [HTML Event Attributes](https://www.w3schools.com/tags/ref_eventattributes.asp)
+
+```js
+import React, { useState } from "react";
+
+function App() {
+  const [headingText, setHeadingText] = useState("Hello");
+  const [isMousedOver, setMouseOver] = useState(false);
+//each event trigger state change
+  function handleClick() {
+    setHeadingText("Submitted");
+  }
+
+  function handleMouseOver() {
+    setMouseOver(true);
+  }
+
+  function handleMouseOut() {
+    setMouseOver(false);
+  }
+
+  return (
+    <div className="container">
+      <h1>{headingText}</h1>
+      <input type="text" placeholder="What's your name?" />
+      <button
+        style={{ backgroundColor: isMousedOver ? "black" : "white" }}
+        // different events
+        onClick={handleClick}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+      >
+        Submit
+      </button>
+    </div>
+  );
+}
+```
+
+### React Forms
+
+Rather than a `<div>` element, we are using `<form>` element.
+
+```js
+import React, { useState } from "react";
+
+function App() {
+  const [name, setName] = useState("");
+  const [headingText, setHeading] = useState("");
+  
+//setting the state when input changed, so the variable name is updated to event.target.value
+  function handleChange(event) {
+    //console.log(event.target.value);
+    setName(event.target.value);
+  }
+  
+// only when submit is clicked, we are setting the heading text
+  function handleClick(event) {
+    setHeading(name);
+//form by default is refreshed, below will disable the refresh
+    event.preventDefault();
+  }
+
+  return (
+    <div className="container">
+      <h1>Hello {headingText}</h1>
+      <form onSubmit={handleClick}>
+        <input
+          onChange={handleChange}
+          type="text"
+          placeholder="What's your name?"
+          value={name}
+        />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+}
+```
+
+### Changing Complex State
+
+Use object set initial value and update state when needed.
+
+```js
+import React, { useState } from "react";
+
+function App() {
+
+// create object fullName with two keys, fName and lName
+  const [fullName, setFullName] = useState({
+    fName: "",
+    lName: ""
+  });
+
+  function handleChange(event) {
+  //name will be the key, value is value
+    const { value, name } = event.target;
+//set state with previous value of the object
+    setFullName(prevValue => {
+    // if key is fName then update fName in fullName
+      if (name === "fName") {
+        return {
+          fName: value,
+          lName: prevValue.lName
+        };
+      } else if (name === "lName") {
+        return {
+          fName: prevValue.fName,
+          lname: value
+        };
+      }
+    });
+  }
+
+  return (
+    <div className="container">
+      <h1>
+        Hello {fullName.fName} {fullName.lName}
+      </h1>
+      <form>
+        <input
+          name="fName"
+          onChange={handleChange}
+          placeholder="First Name"
+          value={fullName.fName}
+        />
+        <input
+          name="lName"
+          onChange={handleChange}
+          placeholder="Last Name"
+          value={fullName.lName}
+        />
+        <button>Submit</button>
+      </form>
+    </div>
+  );
+}
+```
 
 
 
