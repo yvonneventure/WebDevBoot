@@ -49,7 +49,38 @@
 
 W3Schools [on SQL](https://www.w3schools.com/sql/)
 
+#### Create Table and Insert data
 
+- [Data Types in SQL](https://www.w3schools.com/sql/sql_datatypes.asp)
+- [Primary Keys in SQL](https://www.w3schools.com/sql/sql_primarykey.asp) : Uniquely identiy each record in the table
+- [Insert Into in SQL](https://www.w3schools.com/sql/sql_insert.asp)
+
+```sql
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    column3 datatype,
+   ....
+);
+
+--example CREATE TABLE
+CREATE TABLE products (
+    ID INT NOT NULL,
+    Name STRING,
+    Price MONEY,
+    PRIMARY KEY (ID)
+);
+
+--INSERT INTO seleted columns
+
+INSERT INTO table_name (column1, column2, column3, ...)
+VALUES (value1, value2, value3, ...);
+
+--INSERT INTO all columns
+
+INSERT INTO products 
+VALUES (1, "Pen", 1.20);
+```
 
 
 
