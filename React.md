@@ -638,12 +638,43 @@ function App() {
 
 ### Manage Component Tree with States
 
+- When pass over array info from App.jsx, you need a "key" field and "id" field
+  - It's not recommended to use index as id, you should use [uuid](https://www.npmjs.com/package/uuid)
+  - For the training purpose, we can use index 
 
 
+- ❗️Executed on Click vs. Executed on Render
 
+```js
+// Executed on Click
+function ToDoItem(props) {
+  return (
+    <div
+    //pass over a function
+      onClick={() => {
+        props.onChecked(props.id);
+      }}
+    >
+      <li>{props.text}</li>
+    </div>
+  );
+}
 
+//Executed on Render
 
+function ToDoItem(props) {
+  return (
+  // it's passed over as a prop
+    <div onClick={props.onChecked(props.id)} >
+      <li>{props.text}</li>
+    </div>
+  );
+}
+```
 
+- `props` can also be used to call a funtion in app and pass over to the component => like pass the function/info out
+
+- App is served as a central place for things that components need, and use props to pass over the info; State is usually within the component, so that the component is controling itself
 
 
 
