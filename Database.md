@@ -3,6 +3,13 @@
 - [**SQL database**](https://github.com/yvonneventure/WebDevBootCamp/new/main#sql-structured-query-language): MySQL, PostgreSQL
 - [**NoSQL database**](https://github.com/yvonneventure/WebDevBootCamp/new/main#nosql-not-only-structured-query-language): MongoDB, redis
 
+### Database actions (CRUD)
+- Create
+- Read
+- Update
+- Destroy
+
+
 ### Difference between SQL and NoSQL
 
 ####  📌Structure :
@@ -39,6 +46,8 @@
 
 
 ## SQL (Structured Query Language)
+
+W3Schools [on SQL](https://www.w3schools.com/sql/)
 
 
 
