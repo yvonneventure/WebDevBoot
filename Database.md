@@ -82,8 +82,103 @@ INSERT INTO products
 VALUES (1, "Pen", 1.20);
 ```
 
+#### Read data use SELECT and WHERE
+
+```sql
+
+-- Read everythin from table
+
+SELECT * FROM products;
+
+-- Read selected columns from table
+
+SELECT Name, Price FROM products;
+
+-- Read selected rows from table
+
+SELECT * FROM products
+WHERE ID=1;
+
+```
 
 
+#### Update data
+
+[UPDATE in SQL](https://www.w3schools.com/sql/sql_update.asp)
+
+```sql
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+
+-- ❗️no WHERE clause will cause all rows updated
+```
+
+##### Add Column
+
+Add column in SQL means alter the table
+
+The `ALTER TABLE` statement is used to **add, delete, or modify columns** in an existing table.
+
+[ALTER TABLE in SQL](https://www.w3schools.com/sql/sql_alter.asp)
+
+```sql
+-- Add Column
+
+ALTER TABLE table_name
+ADD column_name datatype;
+
+-- Delete Column
+
+ALTER TABLE table_name
+DROP COLUMN column_name;
+
+```
+
+
+#### Delete data
+
+```sql
+-- delete certain rows
+
+DELETE FROM table_name WHERE condition;
+
+-- ❗️no WHERE clause will cause all rows deleted
+```
+
+### Relationships, Foreign Key, Joins
+
+A `FOREIGN KEY` is a field (or collection of fields) in one table, that refers to the `PRIMARY KEY` in another table.
+
+[FOREIGN KEY in SQL](https://www.w3schools.com/sql/sql_foreignkey.asp)
+
+```sql
+CREATE TABLE Orders (
+    OrderID int NOT NULL,
+    OrderNumber int NOT NULL,
+    PersonID int,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (PersonID) REFERENCES Persons(PersonID)
+);
+
+--To create a FOREIGN KEY constraint on the "PersonID" column when the "Orders" table is already created
+
+ALTER TABLE Orders
+ADD FOREIGN KEY (PersonID) REFERENCES Persons(PersonID);
+```
+
+A **JOIN** is used to combine rows from two or more tables, based on a related column between them.
+
+[Joins in SQL](https://www.w3schools.com/sql/sql_join.asp)
+
+```sql
+-- Inner Join 
+-- select all orders of a particular customer
+
+SELECT Orders.OrderID, Customers.CustomerName  -- columns you need
+FROM Orders  --the table has foreign key
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;  --another table 
+```
 
 
 ## NOSQL (Not Only Structured Query Language)
