@@ -676,6 +676,17 @@ function ToDoItem(props) {
 
 - App is served as a central place for things that components need, and use props to pass over the info; State is usually within the component, so that the component is controling itself
 
+➡️ check out code of project [**To Do List** ](https://github.com/yvonneventure/WebDevBootCamp/tree/main/React%20-%20todolist)
+
+
+
+
+
+
+
+
+
+
 
 
 
