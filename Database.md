@@ -12,7 +12,7 @@
 
 ### Difference between SQL and NoSQL
 
-####  📌Structure :<img width="240" alt="Screen Shot 2022-09-30 at 14 53 46" src="https://user-images.githubusercontent.com/103771536/193337750-1e7f1ed9-8fd1-440b-8bef-08f8d3ddcd50.png">
+####  📌Structure 
 
 - **SQL**
   - group data into tables
