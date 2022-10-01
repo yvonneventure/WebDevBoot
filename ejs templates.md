@@ -56,10 +56,40 @@ Add `<%` on each line that's not html:
 <%  } %>
 ```
 
-### Pass data from ejs back to app.js
+### Pass data from ejs back to app.js and rerender
 
+This is a todo list app, and each time user make a post request (add new item), the new item will be added to the items array and rerender the home page for the item to show up.
 
+```js
 
+let items=["buy","eat","cook"];
+
+app.get("/", function(req,res){
+  res.render("list",{newListItems : items});
+}
+
+app.post("/", function(req,res){
+    var item=req.body.nextitem;    // nextitem is passed out from ejs to app.js use body-parser
+    items.push(item);            // item added to the array
+    res.redirect("/");      // redirect to home page
+}
+
+```
+
+Then in `list.ejs` render each item in array to a `<p>` element:
+
+```html
+
+<% newListItems.forEach(function(item){ %>         
+        <p> <%=item%> </p>
+         
+      <% }) %>
+
+    <form class="item" action="/" method="post">
+      <input type="text" name="nextitem" placeholder="New Item" autocomplete="off">
+      <button type="submit" name="button" >Add</button>
+      </form>
+```
 
 
 
