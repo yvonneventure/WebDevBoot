@@ -91,8 +91,69 @@ Then in `list.ejs` render each item in array to a `<p>` element:
       </form>
 ```
 
+### 
 
+Use templating to create a todo list and work list use the same list.ejs.
 
+The `app.js`  will look like below:
+
+```js
+const items = ["Buy Food", "Cook Food", "Eat Food"];
+const workItems = [];
+
+app.get("/", function(req, res) {
+
+const day = date.getDate();
+
+  res.render("list", {listTitle: day, newListItems: items});
+
+});
+
+app.post("/", function(req, res){
+
+  const item = req.body.newItem;
+// if the list passed out is work, then redirect to /work route
+  if (req.body.list === "Work") {
+    workItems.push(item);
+    res.redirect("/work");
+  } else {
+    items.push(item);
+    res.redirect("/");
+  }
+});
+
+app.get("/work", function(req,res){
+  res.render("list", {listTitle: "Work", newListItems: workItems});
+});
+
+```
+
+And list.ejs will be :
+
+```html
+  <div class="box">
+    <% for (let i=0; i<newListItems.length; i++) { %>
+      <div class="item">
+        <input type="checkbox">
+        <p><%=  newListItems[i]  %></p>
+      </div>
+      <% } %>
+
+      <form class="item" action="/" method="post">
+        <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+        <!-- this will create a key-value pair with key "list" and value "listTitle" so that we know which list we are in -->
+        <button type="submit" name="list" value=<%=listTitle%>+</button>
+      </form>
+  </div>
+```
+
+### Layouts
+
+Create `header` and `footer` ejs and then just include them to create a consistent layout. All ejs will be in views folder.
+
+`<%- include("header") -%>`
+
+<img width="768" alt="Screen Shot 2022-10-01 at 12 50 16" src="https://user-images.githubusercontent.com/103771536/193419763-dc9a3b23-3688-426c-ab93-ce50d8c97354.png">
 
 
 
