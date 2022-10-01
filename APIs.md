@@ -125,7 +125,124 @@ app.listen(3000, function(){
 });
 ```
 
+## Newsletter Signup Project (use Mailchimp API)
 
+Project folder:
+
+`app.js`: 
+
+```js
+const express=require("express");
+const request=require("request");
+const bodyParser=require("body-parser");
+const https=require("https");
+
+
+const app=express();
+
+// to use static files, create a folder called public and move local css and images to the folder
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({extended:true}));
+
+// -------render signup page as the homepage-----//
+
+app.get("/",function(req,res){
+  res.sendFile(__dirname+"/signup.html");
+});
+
+//-------once user filled out info and pressed submit (make post request)-----//
+app.post("/",function(req,res){
+
+// get the data passed out
+  var firstName=req.body.fName;
+  var lastName=req.body.lName;
+  var email=req.body.email;
+  
+// compose the data into object
+  var data={
+    members:[
+      {
+        email_address:email,
+        status: "subscribed",
+        merge_fields:{
+          FNAME:firstName,
+          LNAME:lastName
+        }
+
+      }
+    ]
+  }
+  
+// transform the data into string, where mailchimp accept
+  var jsonData=JSON.stringify(data);
+  const url="https://us10.api.mailchimp.com/3.0/lists/<list_ID>";
+  
+  
+// set up the option
+  const options ={
+    method:"POST",
+    auth:"name: <api_key>"
+  }
+
+
+//----------make a post request to mailchimp with options-------------//
+
+  const request= https.request(url,options,function(response){
+    if (response.statusCode===200){
+      res.sendFile(__dirname+"/success.html")
+    } else {
+      res.sendFile(__dirname+"/failure.html")
+    }
+
+
+// the data response get back from mailchimp
+    // response.on("data",function(data){
+    //   console.log(JSON.parse(data));
+    // });
+  });
+//-----------pass the stringified json data to mailchimp---//
+  request.write(jsonData);
+  request.end();    // once the post request is done, end the request
+
+});
+
+
+//------handle the post request from  failure.html form ---------//
+app.post("/failure",function(req,res){
+  res.redirect("/");
+});
+
+
+
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Server is running on port 3000");
+})
+```
+
+`failure.html` :
+
+```html
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Failure</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+
+  </head>
+  <body>
+    <div class="jumbotron">
+  <h1 class="display-4">Uh Oh!</h1>
+  <p class="lead">There was a problem signing you up. Please try again or contact me.</p>
+<form method="post" action="/failure">
+  <button class="btn btn-lg btn-warning" type="submit">Try again!</button>
+  </form>
+
+</div>
+  </body>
+</html>
+
+```
 
 
 
