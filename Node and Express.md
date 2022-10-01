@@ -25,8 +25,64 @@ Then run `node index.js` in command line to **execute**.
 
 #### `const` vs. `var`
   - `const` are for values do not change, `var` are for values will be updated.
+  - `const` still can be updated with new value, but the structure cannot be changed.
+  - For example:
+ ```
+ const a=[1,1,1] 
+ // then later, a can be pushed but cannot be reassigned as another array.
+ a=[2,2] // X  cannot be done
+ a.push(3);  // ok to do
+ 
+ ```
 
-### To Use External Modules
+### Export modules
+
+To use the module in `app.js` simple require it. Local module need to add `_dirname`.
+
+```js
+const date = require(__dirname + "/date.js");
+date.getDate();   // Calling the function
+```
+
+Then in `date.js` file :
+
+```js
+//export getDate as a method, if `exports.getDate()` with (), then when the module is required, the function will automatically run instead of when the function is called
+// if module.exports="Hello World"; then when module required, the console will log "Hello World"
+
+
+exports.getDate=function (){
+let today = new Date();
+let currentDay=today.getDay();
+
+let options={
+  weekday:"long",
+  day:"numeric",
+  month:"long",
+}
+
+let day=today.toLocaleDateString("en-US",options);
+
+return day;
+};
+```
+
+#### If the module only has one export
+
+Then `const date = require(__dirname + "/date.js");` the date here will be that export.
+
+
+
+
+
+
+
+
+
+
+
+
+## To Use External Modules
 
 #### Use [NPM (Node Package Manager)](https://www.npmjs.com)
 
