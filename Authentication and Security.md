@@ -532,11 +532,182 @@ Step 5. Once permission granted, our site will receive a authurization code (jus
 Step 6. Exchange Auth code for Access Tocken (can access info)
 
 
-Use login with Google as example
+Use [assport-google-oauth20 strategy](https://www.passportjs.org/packages/passport-google-oauth20/) with Google as example
+
+Install : `$ npm install passport-google-oauth20`
+
+Then create a project with [Google developers console](https://console.cloud.google.com/projectselector2/apis/dashboard?supportedpurview=project)
+
+Then go to "Credentials" then "OAuthen Consent Screen" to set up admin credentials.
+
+Your application will be issued a client ID and client secret, which need to be provided to the strategy. 
+
+You will also need to configure a redirect URI which matches the route in your application.
+
+```js
+require('dotenv').config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const ejs = require("ejs");
+const mongoose = require("mongoose");
+const session = require('express-session');
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;  // require google strategy
+const findOrCreate = require('mongoose-findorcreate');   // to use findorCreate
+
+const app = express();
+
+app.use(express.static("public"));
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(session({
+  secret: "Our little secret.",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
+mongoose.set("useCreateIndex", true);
+
+const userSchema = new mongoose.Schema ({
+  email: String,
+  password: String,
+  googleId: String   // add this field for google user
+});
+
+userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);  // also add the plugin
+
+const User = new mongoose.model("User", userSchema);
+
+passport.use(User.createStrategy());
+
+// serial and deserial use passport rather than passport-local-mongoose(only works for local strategy)
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+/// from passport-google-oauth20
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID,     // client ID and secret from google console
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/secrets",    
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  function(accessToken, refreshToken, profile, cb) {      //info google will return once successfully authenticated
+    console.log(profile);
+
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {  // find the user or create user if not exits, use the id from google
+      return cb(err, user);
+    });
+  }
+));
+
+app.get("/", function(req, res){
+  res.render("home");
+});
+
+// route for authentication with google
+app.get("/auth/google",
+  passport.authenticate('google', { scope: ["profile"] })  // use google to authenticate and we ask for the profile info
+);
+
+app.get("/auth/google/secrets",                     // authorized redirect url we put in google developer console
+  passport.authenticate('google', { failureRedirect: "/login" }),
+  function(req, res) {
+    // Successful authentication, redirect to secrets.
+    res.redirect("/secrets");
+  });
+  
+  //---------------------below are the same---------//
+
+app.get("/login", function(req, res){
+  res.render("login");
+});
+
+app.get("/register", function(req, res){
+  res.render("register");
+});
+
+app.get("/secrets", function(req, res){
+  if (req.isAuthenticated()){
+    res.render("secrets");
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/");
+});
+
+app.post("/register", function(req, res){
+
+  User.register({username: req.body.username}, req.body.password, function(err, user){
+    if (err) {
+      console.log(err);
+      res.redirect("/register");
+    } else {
+      passport.authenticate("local")(req, res, function(){
+        res.redirect("/secrets");
+      });
+    }
+  });
+
+});
+
+app.post("/login", function(req, res){
+
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password
+  });
+
+  req.login(user, function(err){
+    if (err) {
+      console.log(err);
+    } else {
+      passport.authenticate("local")(req, res, function(){
+        res.redirect("/secrets");
+      });
+    }
+  });
+
+});
 
 
 
+app.listen(3000, function() {
+  console.log("Server started on port 3000.");
+});
+```
 
+In the front end, the register.ejs and login.ejs added a button below:
+
+```html
+ <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <a class="btn btn-block btn-social btn-google" href="/auth/google" role="button">
+            <i class="fab fa-google"></i>
+            Sign Up with Google
+          </a>
+        </div>
+```
 
 
 
