@@ -187,8 +187,51 @@ We will only store the salt and the Hash in the database. MD5 is the most easies
 > - [YouTube Video: Flaw in the Enigma Code - Numberphile](https://www.youtube.com/watch?v=V4V2bpZlqx8)
 > - [Book: The Code Book by Simon Singh](https://www.torontopubliclibrary.ca/search.jsp?Ntt=The+code+book)
 
+## Use ENV to keep secrets safe
 
-### Hacking Passwords 101
+[Dotenv](https://www.npmjs.com/package/dotenv)is a module that loads environment variables from a `.env` file into `process.env` code.
+
+### Install
+
+```
+# install locally (recommended)
+npm install dotenv --save
+```
+
+### Usage
+
+`.env` is a hidden file, can not show use `ls`, only can show use `ls -a` or in Atom.
+
+
+Create a `.env` file in the root of your project, and in your file, no space, use capital letters, with quotes:
+
+```
+S3_BUCKET="YOURS3BUCKET"
+API_KEY="YOURSECRETKEYGOESHERE"
+```
+
+Then in your app.js code:
+
+```js
+require('dotenv').config()  //require it at the top
+const apiKey= process.env.API_KEY;   //use it
+
+```
+
+## gitignore
+
+A collection of `.gitignore` [templates](https://github.com/github/gitignore).
+
+Here we are using the one for [Node](https://github.com/github/gitignore/blob/main/Node.gitignore).
+
+For node projects, usually we are ignoring node modules folder and `.env` file.
+
+In the root of your folder, `touch .gitignore`. Then copy the template for node into our `.gitignore`.
+
+
+
+
+## Hacking Passwords 101
 
 > - [Check if your password got hacked](https://haveibeenpwned.com)
 > - [List_of_the_most_common_passwords](https://en.wikipedia.org/wiki/List_of_the_most_common_passwords)
