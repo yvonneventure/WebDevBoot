@@ -83,7 +83,7 @@ app.listen(3000, function() {
   console.log("Server started on port 3000.");
 });
 ```
-### - Level 2 (Encryption) : Password + Key with cipher method, then we end up with some ciphertext
+### - Level 2 Encryption : Password + Key with cipher method, then we end up with some ciphertext
 
 Limitation is that encrytion needs key, which is not that secure if the hacker is motivated enough.
 
@@ -171,7 +171,7 @@ app.listen(3000, function() {
 });
 ```
 
-### - Level 3 (Hashing) : Password with a hash function will produce a Hash and we will store the hash in the server. 
+### - Level 3 Hashing : Password with a hash function will produce a Hash and we will store the hash in the server. 
 
 Hash function is a mathematical function that will take no time going forward, but almost impossible going backward. Meaning it may take 1 millisecond to hash it, but may take 2 years to decode it. Hashing also doesn't need a key.
 
@@ -261,21 +261,128 @@ app.listen(3000, function() {
 });
 ```
 
-### - Level 4 (Salting): Adding random characters to user's password to generate the hash. 
+### - Level 4 Salting: Adding random characters to user's password to generate the hash. 
 
-We will only store the salt and the Hash in the database. MD5 is the most easiest hash to be hacked. Now the industry standard is `bcrypt` and also use Salt Rounds. 
+We will only store the salt and the Hash in the database. MD5 is the most easiest hash to be hacked. Now the industry standard is [**bcrypt**](https://github.com/kelektiv/node.bcrypt.js#readme) and also use Salt Rounds. 
 
-**Salt Rounds**: First we use password and a random set of salt to generate Hash, then we take this Hash and add the same salt agin and create another Hash, then do this again and again. This is called Salt Rounds. In this case, we only store the salt and end Hash in the database. Once user input the password, we will use the salt stored in database, and hash the same number of rounds and compare with the end hash stored in database, if it's a match then we have our user verified.
+
+
+**Salt Rounds**: First we use password and **a random set of salt** to generate Hash, then we take this Hash and add the same salt agin and create another Hash, then do this again and again. This is called Salt Rounds. In this case, we only store the salt and end Hash in the database. Once user input the password, we will use the salt stored in database, and hash the same number of rounds and compare with the end hash stored in database, if it's a match then we have our user verified.
+
+Install bcypt :`npm install bcrypt`
+
+Then use `bcypt`:
 
 ```js
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+//Technique 2 (auto-gen a salt and hash):
+
+bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+    // Store hash in your password DB.
+});
+
+```
+
+The entire `app.js` will look like below:
+
+```js
+require('dotenv').config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const ejs = require("ejs");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
+const app = express();
+
+app.use(express.static("public"));
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
+
+const userSchema = new mongoose.Schema ({
+  email: String,
+  password: String
+});
 
 
+const User = new mongoose.model("User", userSchema);
+
+app.get("/", function(req, res){
+  res.render("home");
+});
+
+app.get("/login", function(req, res){
+  res.render("login");
+});
+
+app.get("/register", function(req, res){
+  res.render("register");
+});
+
+app.post("/register", function(req, res){
+
+  bcrypt.hash(req.body.password, saltRounds, function(err, hash) {  // bcrypt hash
+    const newUser =  new User({
+      email: req.body.username,
+      password: hash    //store the generated hash
+    });
+    newUser.save(function(err){
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("secrets");
+      }
+    });
+  });
+
+});
+
+app.post("/login", function(req, res){
+  const username = req.body.username;
+  const password = req.body.password;
+
+  User.findOne({email: username}, function(err, foundUser){
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUser) {
+        bcrypt.compare(password, foundUser.password, function(err, result) {  // compare the password inputted with the hash in database
+          if (result === true) {
+            res.render("secrets");
+          }
+        });
+      }
+    }
+  });
+});
+
+
+
+app.listen(3000, function() {
+  console.log("Server started on port 3000.");
+});
 ```
 
 > - [Cryptii](https://cryptii.com)
 > - [YouTube Video: Enigma Machine - Numberphile](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
 > - [YouTube Video: Flaw in the Enigma Code - Numberphile](https://www.youtube.com/watch?v=V4V2bpZlqx8)
 > - [Book: The Code Book by Simon Singh](https://www.torontopubliclibrary.ca/search.jsp?Ntt=The+code+book)
+
+
+### - Level 5 Cookies and Session
+
+
+
+
+
+### - Level 6 OAuth 2.0
+
 
 ## Use ENV to keep secrets safe
 
