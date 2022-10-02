@@ -509,7 +509,31 @@ app.post("/login", function(req, res){
 
 
 
-### - Level 6 OAuth 2.0
+### - Level 6 OAuth 2.0 : delegating user signin use google or facebook
+
+#### Why OAuth?
+
+1. Grant Granular Access, like what pieces of info we can access only name or their contact list
+2. Allow read-only access or read&write access 
+3. Revoke access : facebook/google can remove your access to their info
+
+#### Steps of OAuth
+
+Step 1. Set up our app and let third-party (Google/faceboook) know who we are, and we will get an app_id/client_id
+
+Step 2. Redirect to the third-party site to authenticate
+
+Step 3. user login on the third-party site
+
+Step 4. User review and grant permissions
+
+Step 5. Once permission granted, our site will receive a authurization code (just authenticated)
+
+Step 6. Exchange Auth code for Access Tocken (can access info)
+
+
+Use login with Google as example
+
 
 
 
