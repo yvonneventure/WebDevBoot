@@ -408,12 +408,15 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+
+//--------------- first, set the express session
 app.use(session({
-  secret: "Our little secret.",
+  secret: "Our little secret.",   // any long string, should be store in .env
   resave: false,
   saveUninitialized: false
 }));
 
+//--------------------- then initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -425,14 +428,17 @@ const userSchema = new mongoose.Schema ({
   password: String
 });
 
+//--------passportlocalmongoose as plugin
 userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
 
+//------passport local mongoose to create local strategy---//
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+//------------------//
 
 app.get("/", function(req, res){
   res.render("home");
@@ -447,26 +453,30 @@ app.get("/register", function(req, res){
 });
 
 app.get("/secrets", function(req, res){
-  if (req.isAuthenticated()){
+  if (req.isAuthenticated()){    // check if user is authenticated
     res.render("secrets");
   } else {
     res.redirect("/login");
   }
 });
 
+//log out route
+
 app.get("/logout", function(req, res){
+// logout from passport
   req.logout();
   res.redirect("/");
 });
 
 app.post("/register", function(req, res){
 
+//paspport local mongoose to register user
   User.register({username: req.body.username}, req.body.password, function(err, user){
     if (err) {
       console.log(err);
       res.redirect("/register");
     } else {
-      passport.authenticate("local")(req, res, function(){
+      passport.authenticate("local")(req, res, function(){  // if no error, authenticate our user
         res.redirect("/secrets");
       });
     }
@@ -476,11 +486,13 @@ app.post("/register", function(req, res){
 
 app.post("/login", function(req, res){
 
+// create user object
   const user = new User({
     username: req.body.username,
     password: req.body.password
   });
-
+  
+// comes from passport module
   req.login(user, function(err){
     if (err) {
       console.log(err);
@@ -493,14 +505,27 @@ app.post("/login", function(req, res){
 
 });
 
-
-
-
 ```
 
 
 
 ### - Level 6 OAuth 2.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Use ENV to keep secrets safe
