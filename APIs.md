@@ -246,7 +246,150 @@ app.listen(process.env.PORT || 3000, function(){
 
 
 
+## REST API
 
+### REST (REpresentational State Transfer)
+
+![image](https://user-images.githubusercontent.com/103771536/193451788-9200b482-bd28-4094-b927-ddf6b4db613a.png)
+
+
+
+
+**1. Use HTTP Request Verbs (Get, Post, Put/Patch, Delete)**
+> Similar to database CRUD (Create, Read, Update, Delete)
+
+##### Put vs Patch
+- Put : Replace the entire entry
+- Patch: Replace only pieces of data
+
+**2. Use specific Pattern of Routes/Endpoint URLs**
+
+Express allows [chained route handler](https://expressjs.com/en/guide/routing.html) for the same route like code below use `app.route()`.
+
+```js
+const express = require("express");
+const bodyParser = require("body-parser");
+const ejs = require("ejs");
+const mongoose = require('mongoose');
+
+const app = express();
+
+app.set('view engine', 'ejs');
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(express.static("public"));
+
+mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true});
+
+const articleSchema = {
+  title: String,
+  content: String
+};
+
+const Article = mongoose.model("Article", articleSchema);
+
+///////////////////////////////////Requests Targetting all Articles////////////////////////
+
+app.route("/articles")   // chained route
+
+.get(function(req, res){     // get all articles
+  Article.find(function(err, foundArticles){
+    if (!err) {
+      res.send(foundArticles);
+    } else {
+      res.send(err);
+    }
+  });
+})
+
+.post(function(req, res){    // post one new article
+
+  const newArticle = new Article({
+    title: req.body.title,
+    content: req.body.content
+  });
+
+  newArticle.save(function(err){
+    if (!err){
+      res.send("Successfully added a new article.");
+    } else {
+      res.send(err);
+    }
+  });
+})
+
+.delete(function(req, res){   // delete all articles
+
+  Article.deleteMany(function(err){
+    if (!err){
+      res.send("Successfully deleted all articles.");
+    } else {
+      res.send(err);
+    }
+  });
+});
+
+////////////////////////////////Requests Targetting A Specific Article////////////////////////
+
+app.route("/articles/:articleTitle")
+
+.get(function(req, res){
+
+  Article.findOne({title: req.params.articleTitle}, function(err, foundArticle){
+    if (foundArticle) {
+      res.send(foundArticle);
+    } else {
+      res.send("No articles matching that title was found.");
+    }
+  });
+})
+
+.put(function(req, res){
+
+  Article.update(
+    {title: req.params.articleTitle},                     // conditions
+    {title: req.body.title, content: req.body.content},   //updates : entire record; if you only specify one field then by default it will make other fields without value supplemented null.
+    {overwrite: true},                           // overwrite entire record
+    function(err){
+      if(!err){
+        res.send("Successfully updated the selected article.");
+      }
+    }
+  );
+})
+
+.patch(function(req, res){
+
+  Article.update(
+    {title: req.params.articleTitle},
+    {$set: req.body},         // make updates to the specific field
+    function(err){
+      if(!err){
+        res.send("Successfully updated article.");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+})  // no semicolon
+
+.delete(function(req, res){
+
+  Article.deleteOne(
+    {title: req.params.articleTitle},
+    function(err){
+      if (!err){
+        res.send("Successfully deleted the corresponding article.");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+}); has semicolon, only the last function in chained router has the semicolon
+
+```
 
 
 
